@@ -9,8 +9,8 @@
 
 <?php
 // define variables and set to empty values
-$nameErr = $emailErr = $genderErr = $websiteErr = "";
-$name = $email = $gender = $comment = $website = "";
+$nameErr = $emailErr = $genderErr = $MobileeErr = $idErr = $PasswordErr ="";
+$name = $email = $gender = $comment = $Mobile =$id = $Password = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($_POST["name"])) {
@@ -22,6 +22,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $nameErr = "Only letters and white space allowed";
     }
   }
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (empty($_POST["id"])) {
+      $idErr = "id is required";
+    } else {
+      $id = test_input($_POST["id"]);
+      // check if name only contains letters and whitespace
+      if (!preg_match(" /^[a-z0-9_-]\w{5,20}$/",$id)) {
+        $idErr = "Only letters and white space allowed";
+      }
+    }
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      if (empty($_POST["Password"])) {
+        $PasswordErr = "Password is required";
+      } else {
+        $Password = test_input($_POST["Password"]);
+        // check if name only contains letters and whitespace
+        if (!preg_match("/^(?=.*[a-zA-Z])(?=.*[0-9]).{7,16}$/",$Password)) {
+          $PasswordErr = "Only letters and white space allowed";
+        }
+      }
   
   if (empty($_POST["email"])) {
     $emailErr = "Email is required";
@@ -33,13 +53,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   }
     
-  if (empty($_POST["website"])) {
-    $website = "";
+  if (empty($_POST["Mobile"])) {
+    $Mobile = "";
   } else {
-    $website = test_input($_POST["website"]);
+    $Mobile = test_input($_POST["Mobile"]);
     // check if URL address syntax is valid (this regular expression also allows dashes in the URL)
-    if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$website)) {
-      $websiteErr = "Invalid URL";
+    if (!preg_match(" /^01([016789]?)-?([0-9]{3,4})-?([0-9]{4})$/",$Mobile)) {
+      $MobileErr = "Invalid URL";
     }
   }
 
@@ -70,11 +90,17 @@ function test_input($data) {
   Name: <input type="text" name="name" value="<?php echo $name;?>">
   <span class="error">* <?php echo $nameErr;?></span>
   <br><br>
+  id: <input type="text" id="id" value="<?php echo $id;?>">
+  <span class="error">* <?php echo $idErr;?></span>
+  <br><br>
+  Password: <input type="text" Password="Password" value="<?php echo $Password;?>">
+  <span class="error">* <?php echo $PasswordErr;?></span>
+  <br><br>
   E-mail: <input type="text" name="email" value="<?php echo $email;?>">
   <span class="error">* <?php echo $emailErr;?></span>
   <br><br>
-  Website: <input type="text" name="website" value="<?php echo $website;?>">
-  <span class="error"><?php echo $websiteErr;?></span>
+  Mobile: <input type="text" name="Mobile" value="<?php echo $Mobile;?>">
+  <span class="error"><?php echo $MobileErr;?></span>
   <br><br>
   Comment: <textarea name="comment" rows="5" cols="40"><?php echo $comment;?></textarea>
   <br><br>
@@ -91,9 +117,13 @@ function test_input($data) {
 echo "<h2>Your Input:</h2>";
 echo $name;
 echo "<br>";
+echo $id;
+echo "<br>";
+echo $Password;
+echo "<br>";
 echo $email;
 echo "<br>";
-echo $website;
+echo $Mobile;
 echo "<br>";
 echo $comment;
 echo "<br>";
